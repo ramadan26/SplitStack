@@ -2,7 +2,7 @@
 
 > Split expenses with friends, simplify debts, and settle up — a mobile-first PWA inspired by Splitwise.
 
-**🔗 Live demo:** https://splitstack.vercel.app _(update after deployment)_
+**🔗 Live demo:** https://split-stack-xi.vercel.app
 **Demo login:** `alex@demo.com` · `sarah@demo.com` · `mike@demo.com` — password `demo1234`
 
 ---
