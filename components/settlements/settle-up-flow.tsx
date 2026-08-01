@@ -191,7 +191,9 @@ export function SettleUpFlow({
                   <Avatar name={toMember?.name} email={toMember?.email} image={toMember?.image} size="sm" className="ring-2 ring-white dark:ring-zinc-900" />
                 </span>
                 <span className="min-w-0 flex-1 truncate text-sm">
-                  {t("owes", { from: nameOf(s.from), to: nameOf(s.to) })}
+                  {s.from === currentUserId
+                    ? t("youOwe", { to: nameOf(s.to) })
+                    : t("owes", { from: nameOf(s.from), to: nameOf(s.to) })}
                 </span>
                 <span className="shrink-0 text-sm font-semibold">
                   {money(s.amount)}

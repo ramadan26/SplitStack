@@ -150,6 +150,7 @@
     "title": "Settle up",
     "plan": "Suggested payments",
     "owes": "{from} owes {to}",
+    "youOwe": "You owe {to}",
     "noDebts": "Nothing to settle — everyone is squared away 🎉",
     "from": "From",
     "to": "To",
