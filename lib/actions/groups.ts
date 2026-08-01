@@ -1,11 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { z } from "zod";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { computeNetBalances } from "@/lib/balance";
+import { sendEmail } from "@/lib/email";
 
 export type GroupActionResult =
   | { ok: true; groupId?: string }
@@ -133,6 +135,37 @@ export async function inviteMember(input: unknown): Promise<GroupActionResult> {
       },
     }),
   ]);
+
+  // Best-effort invitation email — the invite itself already succeeded, so
+  // a mail failure must not fail the action.
+  try {
+    const inviter = await db.user.findUnique({
+      where: { id: userId },
+      select: { name: true, email: true },
+    });
+    const inviterName = inviter?.name ?? inviter?.email ?? "Someone";
+    const origin =
+      headers().get("origin") ??
+      (process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000");
+    await sendEmail({
+      to: email,
+      subject: `${inviterName} invited you to "${group.name}" on SplitStack`,
+      text: [
+        "Hi,",
+        "",
+        `${inviterName} invited you to join the group "${group.name}" on SplitStack.`,
+        "",
+        "Sign in with this email address and you'll join the group automatically:",
+        `${origin}/login`,
+        "",
+        "— SplitStack",
+      ].join("\n"),
+    });
+  } catch (error) {
+    console.error("Failed to send invitation email:", error);
+  }
 
   revalidatePath(`/groups/${groupId}`);
   revalidatePath(`/groups/${groupId}/settings`);
