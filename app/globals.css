@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Arabic UI uses Cairo; everything else keeps the system font stack */
+  html[lang="ar"] body {
+    font-family: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Safe-area helpers for notched devices */
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pl-safe {
+    padding-left: env(safe-area-inset-left);
+  }
+  .pr-safe {
+    padding-right: env(safe-area-inset-right);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
